@@ -1,2 +1,34 @@
-name: 
-Build TM Pizzaria APK. On: workflow dispatch. Push: branches, main. Jobs. Build. Runs-on: ubuntu-latest. Steps: uses: actions/checkout@v4 uses: actions/setup-java@v4 with: distribution: temurin, java-version: '17'. uses: gradle/actions/setup-gradle@v4, com gradle-version: '8.9'. E, em seguida, use o comando run: ./gradlew assembleDebug. Por fim, mantenha o upload do APK igual. Depois de copiar, me avise se o texto entrou certinho.
+
+name: Build TM Pizzaria APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar projeto
+        uses: actions/checkout@v4
+
+      - name: Configurar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Configurar Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Gerar APK
+        run: chmod +x gradlew && ./gradlew assembleDebug
+
+      - name: Salvar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: TM-Pizzaria-APK
+          path: app/build/outputs/apk/debug/*.apk
